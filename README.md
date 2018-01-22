@@ -1,6 +1,6 @@
 # template-vue-cli
 
-> A Vue.js project
+> 创睦互动后台管理
 
 ## Build Setup
 
