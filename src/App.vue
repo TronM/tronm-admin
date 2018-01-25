@@ -1,7 +1,9 @@
 <template>
     <div id="app">
-        <img src="./assets/logo.png">
-        <router-view/>
+		<transition name="fade"
+		            mode="out-in">
+			<router-view></router-view>
+		</transition>
     </div>
 </template>
 
@@ -12,18 +14,17 @@ export default {
 </script>
 
 <style lang="less">
-#app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
+@import url('./assets/style/common.less');
+
+// 初始化
+html, body {
+    margin: 0;
+    padding: 0;
 }
 
-.aa {
-    .qq {
-        font-size: 12px;
-    }
+body {
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+    font-size: 14px;
 }
+
 </style>
