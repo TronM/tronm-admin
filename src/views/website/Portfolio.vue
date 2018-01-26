@@ -5,13 +5,24 @@
 				<el-form-item>
 					<el-button type="primary" @click="create()">新建</el-button>
 				</el-form-item>
+				<el-form-item>
+                    <el-input placeholder="输入标签名称">
+                        <template slot="prepend">标签</template>
+                        <el-button slot="append" icon="el-icon-search"></el-button>
+                    </el-input>
+				</el-form-item>
 			</el-form>
 		</el-col>
 
         <el-table :data="list" stripe border style="width: 100%" ref="table">
-            <el-table-column prop="name" label="名称" width="180"></el-table-column>
-            <el-table-column prop="val" label="值" width="400"></el-table-column>
-            <el-table-column prop="description" label="描述"></el-table-column>
+            <el-table-column label="公开" width="80" align="center">
+                <template slot-scope="scope">
+                    <el-switch
+                        v-model="scope.row.isPublish" @change="changePublish(scope.row.id)">
+                    </el-switch>
+                </template>
+            </el-table-column>
+            <el-table-column prop="headline" label="标题"></el-table-column>
             <el-table-column prop="operation" label="操作" width="200">
                 <template slot-scope="scope">
                     <el-button size="small" @click="edit(scope.row)">编辑</el-button>
@@ -23,7 +34,7 @@
         <el-col :span="24" class="footerbar">
             <el-pagination class="pagination"
                 background
-                layout="total, prev, pager, next" 
+                layout="prev, pager, next" 
                 :total="total" 
                 :page-size="pagesize"
                 :current-page.sync="page"
@@ -79,32 +90,32 @@ import Editor from '@/components/Editor.vue'; // 调用编辑器
 import api from '@/api/website/portfolio';
 import config from '@/config';
 
+const fields = {
+    headline: '',
+    body: '',
+    headlineImage: '',
+    isPublish: false,
+    tag: [],
+    browseUrl: {
+        h5: '',
+        pc: ''
+    }
+};
+
 export default {
     components: {Editor},
     data() {
         return {
             ...config,
             list: [],
-            total: 0,
+            total: 30,
             page: 1,
             tagVisible: false,                  // 标签
             tagValue: '',                       // 标签值
             form: {
                 visible: false,
                 editId: 0,
-                fields: {
-                    headline: '12345',
-                    body: '',
-                    headlineImage: '',
-                    isPublish: '',
-                    tag: ['11', '22'],
-                    browseUrl: {
-                        h5: '',
-                        pc: ''
-                    },
-                    createdBy: '',
-                    ownedBy: ''
-                },
+                fields,
                 rules: {
                     headline: [
                         { required: true, message: '请输入标题', trigger: 'blur' },
@@ -119,8 +130,9 @@ export default {
     },
     methods: {
         async loadList(page, pagesize) {
-            const { total, list } = await api.list({page, pagesize});
-            this.total = total;
+            // const { total, list } = await api.list({page, pagesize});
+            const list = await api.list({page, pagesize});
+            // this.total = 10;
             this.list = list;
         },
         handleCurrentChange(page) {
@@ -137,7 +149,7 @@ export default {
         },
         create() {
             this.form.editId = 0;
-            // this.form.fields = {};
+            this.form.fields = fields;
             this.form.visible = true;
             this.$nextTick(() => this.$refs['form'].clearValidate());
         },
