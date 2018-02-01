@@ -4,8 +4,7 @@ import prodConfig from './prod';
 
 const settings = {
     pagesize: 10,
-    uploadName: 'avatar',
-    uploadUrl: ''
+    uploadName: 'avatar'
 };
 
 const config = process.env.NODE_ENV === 'production'

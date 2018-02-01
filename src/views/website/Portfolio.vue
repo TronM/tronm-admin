@@ -6,9 +6,9 @@
 					<el-button type="primary" @click="create()">新建</el-button>
 				</el-form-item>
 				<el-form-item>
-                    <el-input placeholder="输入标签名称">
+                    <el-input v-model="filters.tag" placeholder="输入标签名称" @keyup.enter.native="search()">
                         <template slot="prepend">标签</template>
-                        <el-button slot="append" icon="el-icon-search"></el-button>
+                        <el-button slot="append" icon="el-icon-search" @click="search()"></el-button>
                     </el-input>
 				</el-form-item>
 			</el-form>
@@ -112,6 +112,9 @@ export default {
             page: 1,
             tagVisible: false,                  // 标签
             tagValue: '',                       // 标签值
+            filters: {
+                tag: ''
+            },
             form: {
                 visible: false,
                 editId: 0,
@@ -131,9 +134,12 @@ export default {
     methods: {
         async loadList(page, pagesize) {
             // const { total, list } = await api.list({page, pagesize});
-            const list = await api.list({page, pagesize});
-            // this.total = 10;
+            const list = await api.list({page, pagesize, filters: this.filters});
             this.list = list;
+        },
+        search() {
+            console.log(112233);
+            this.loadList(1, this.pagesize);
         },
         handleCurrentChange(page) {
             this.loadList(page, this.pagesize);
@@ -149,9 +155,9 @@ export default {
         },
         create() {
             this.form.editId = 0;
-            this.form.fields = fields;
+            this.form.fields = Object.assign({}, fields);
             this.form.visible = true;
-            this.$nextTick(() => this.$refs['form'].clearValidate());
+            this.$nextTick(() => this.$refs['form'].resetFields());
         },
         edit(row) {
             this.form.editId = row.id;

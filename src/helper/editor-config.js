@@ -26,7 +26,7 @@ export const quillRedefine = (config) => {
     // 图片上传参数设置
     const defaultUploadConfig = {
         action: '',  // 必填参数 图片上传地址
-        methods: 'POST',  // 必填参数 图片上传方式
+        methods: 'PUT',  // 必填参数 图片上传方式
         // token: sessionStorage.token,  // 可选参数 如果需要token验证，假设你的token有存放在sessionStorage
         name: 'img',  // 必填参数 文件的参数名
         // size: 500,  // 可选参数   图片大小，单位为Kb, 1M = 1024Kb
@@ -61,6 +61,7 @@ export const quillRedefine = (config) => {
                         fileInput.value = '';
                         return;
                     }
+
                     // 创建formData
                     var formData = new FormData();
                     formData.append(uploadConfig.name, fileInput.files[0]);
@@ -68,9 +69,11 @@ export const quillRedefine = (config) => {
                     if (uploadConfig.token) {
                         formData.append('token', uploadConfig.token);
                     }
+
+                    const uploadUrl = uploadConfig.action + '/' + fileInput.files[0].name;
                     // 图片上传
                     var xhr = new XMLHttpRequest();
-                    xhr.open(uploadConfig.methods, uploadConfig.action, true);
+                    xhr.open(uploadConfig.methods, uploadUrl, true);
 
                     if (xhr.upload) {
                         xhr.upload.onprogress = function(event) {
@@ -88,11 +91,11 @@ export const quillRedefine = (config) => {
                     // 上传数据成功，会触发
                     xhr.onload = function(e) {
                         if (xhr.status === 200) {
-                            var res = JSON.parse(xhr.responseText);
-                            let url = uploadConfig.res(res);
+                            // var res = JSON.parse(xhr.responseText);
+                            // let url = uploadConfig.res(res);
                             // console.log(res)
                             let length = self.quill.getSelection(true).index;
-                            self.quill.insertEmbed(length, 'image', url);
+                            self.quill.insertEmbed(length, 'image', uploadUrl);
                             self.quill.setSelection(length + 1);
                             if (uploadConfig.success) {
                                 uploadConfig.success();

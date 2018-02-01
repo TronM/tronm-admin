@@ -23,12 +23,12 @@ instance.interceptors.request.use((require) => {
 instance.interceptors.response.use((response) => {
     loadingInstancce.close();
     const { data, config } = response;
-    console.log(response);
-    if ((response.status === 200 || response.status === 201) && (config.method === 'post' || config.method === 'put' || config.method === 'delete')) {
+    // console.log(response);
+    if ((response.status === 200 || response.status === 201 || response.status === 204) && (config.method === 'post' || config.method === 'put' || config.method === 'delete')) {
         Notification.success({
             title: '操作成功'
         });
-    } else if (response.status !== 200 && response.status !== 201) {
+    } else if (response.status !== 200 && response.status !== 201 && response.status !== 204) {
         Notification.error({
             title: response.statusText
         });
