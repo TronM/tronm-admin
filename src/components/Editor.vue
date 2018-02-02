@@ -74,7 +74,7 @@ export default {
     // height: 30vh;
 }
 
-.ql-editor {
-    height:20rem;
-}
+// .ql-editor {
+//     height:20rem;
+// }
 </style>

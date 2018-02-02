@@ -2,7 +2,9 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Home from '@/views/Home';
 import Portfolio from '@/views/website/Portfolio';
-import HelloWorld from '@/components/HelloWorld';
+import Blog from '@/views/website/Blog';
+import Guest from '@/views/website/Guest';
+import Message from '@/views/website/Message';
 
 Vue.use(Router);
 
@@ -19,10 +21,10 @@ export default new Router({
             component: Home,
             icon: 'el-icon-setting',
             children: [
-                {path: 'database', name: '临时用户', icon: 'el-icon-tickets', component: HelloWorld},
-                {path: 'database', name: '新闻博客', icon: 'el-icon-tickets', component: HelloWorld},
+                {path: 'guest', name: '临时用户', icon: 'el-icon-tickets', component: Guest},
+                {path: 'blog', name: '新闻博客', icon: 'el-icon-tickets', component: Blog},
                 {path: 'portfolio', name: '案例展示', icon: 'el-icon-document', component: Portfolio},
-                {path: 'file', name: '联系我们', icon: 'el-icon-document', component: HelloWorld}
+                {path: 'message', name: '联系我们', icon: 'el-icon-document', component: Message}
             ]
         }
     ]
