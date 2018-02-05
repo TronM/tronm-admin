@@ -6,6 +6,7 @@ const insert = params => axios.post(`${base}`, params).then(res => res);
 const update = (id, params) => axios.put(`${base}/${id}`, params).then(res => res);
 const list = params => {
     let _params = {};
+    _params.rnd = new Date().getTime(); // 防止缓存
     _params.sort = { 'created': -1 };
     _params.limit = params.pagesize;
     _params.offset = (params.page - 1) * params.pagesize;

@@ -66,6 +66,7 @@
                     <el-upload
                     class="avatar-uploader"
                     name="avatar"
+                    :http-request="test"
                     :action="uploadUrl"
                     :show-file-list="false"
                     :on-success="addHeadlineImage">
@@ -89,6 +90,7 @@
 import Editor from '@/components/Editor.vue'; // 调用编辑器
 import api from '@/api/website/portfolio';
 import config from '@/config';
+import upload from '@/utils/upload';
 
 const fields = {
     headline: '',
@@ -118,6 +120,7 @@ export default {
             form: {
                 visible: false,
                 editId: 0,
+                headlineImage: '',
                 fields,
                 rules: {
                     headline: [
@@ -132,6 +135,10 @@ export default {
         this.loadList(this.page, this.pagesize);
     },
     methods: {
+        test(item) {
+            this.form.headlineImage = item.file.name;
+            upload(item);
+        },
         async loadList(page, pagesize) {
             // const { total, list } = await api.list({page, pagesize});
             const list = await api.list({page, pagesize, filters: this.filters});
@@ -190,7 +197,7 @@ export default {
             this.form.fields.tag.splice(this.form.fields.tag.indexOf(tag), 1);
         },
         addHeadlineImage(response) {
-            const path = response.data.path + '/' + response.data.filename;
+            const path = this.uploadUrl + '/' + this.form.headlineImage;
             this.form.fields.headlineImage = path;
         }
     }
