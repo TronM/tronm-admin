@@ -7,7 +7,8 @@ export const quillRedefine = (config) => {
     // 工具栏的工具选项
     const defaultToolOptions = [
         ['bold', 'italic', 'underline', 'strike'],
-        ['blockquote', 'code-block'],
+        // ['blockquote', 'code-block'],
+        ['blockquote'],
         [{'header': 1}, {'header': 2}],
         [{'list': 'ordered'}, {'list': 'bullet'}],
         [{'script': 'sub'}, {'script': 'super'}],

@@ -7,13 +7,13 @@
                     <template v-for="(item, index) in $router.options.routes">
 
                         <!-- 无二级子节点 -->
-                        <el-menu-item v-if="!item.children" :index="item.path" :key="index">
+                        <el-menu-item v-if="!item.children && !item.hidden" :index="item.path" :key="index">
                             <i :class="item.icon"></i>
                             <span slot="title">{{ item.name }}</span>
                         </el-menu-item>
 
                         <!-- 有二级子节点 -->
-                        <el-submenu v-if="item.children" :index="item.name" :key="index">
+                        <el-submenu v-if="item.children && !item.hidden" :index="item.name" :key="index">
                             <template slot="title"><i :class="item.icon"></i><span>{{ item.name }}</span></template>                            
                             <template v-for="(item1, index1) in item.children">
                                 <!-- 无三级菜单 -->

@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import Login from '@/views/Login';
 import Home from '@/views/Home';
 import Portfolio from '@/views/website/Portfolio';
 import Blog from '@/views/website/Blog';
@@ -26,6 +27,12 @@ export default new Router({
                 {path: 'portfolio', name: '案例展示', icon: 'el-icon-document', component: Portfolio},
                 {path: 'message', name: '联系我们', icon: 'el-icon-document', component: Message}
             ]
+        },
+        {
+            path: '/login',
+            name: '登陆',
+            hidden: true,
+            component: Login
         }
     ]
 });

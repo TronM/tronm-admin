@@ -42,7 +42,7 @@
             </el-pagination>
         </el-col>
 
-        <el-dialog :title="form.editId === 0 ? '新建' : '修改'" :visible.sync="form.visible" width="80%">
+        <el-dialog :title="form.editId === 0 ? '新建' : '修改'" :visible.sync="form.visible" :before-close="test2" width="80%">
             <el-form :model="form.fields" ref="form" :rules="form.rules" label-width="120px">
                 <el-form-item label="标题" prop="headline">
                     <el-input v-model="form.fields.headline" placeholder="标题"></el-input>
@@ -135,6 +135,11 @@ export default {
         this.loadList(this.page, this.pagesize);
     },
     methods: {
+        test2(done) {
+            console.log(111222333444555);
+            this.$nextTick(() => this.$refs['form'].resetFields());
+            done();
+        },
         test(item) {
             this.form.headlineImage = item.file.name;
             upload(item);
