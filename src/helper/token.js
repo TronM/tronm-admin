@@ -8,24 +8,22 @@ const save = params => {
     localStorage.tokenType = tokenType;
 };
 
-const get = () => new Promise((resolve, reject) => {
+const get = async() => {
     let accessToken = $.cookie('accessToken');
 
     if (!accessToken) {
-        api.refresh({
-            'grant_type': 'refresh_token',
-            'refresh_token': localStorage.refreshToken
-        }).then(res => {
-            save(res.data);
-            resolve(res.data.access_token);
-        }).catch(v => reject(v));
-
-        // 不加会报错
-        reject('error');
-    } else {
-        resolve(accessToken);
+        try {
+            accessToken = await api.refresh({
+                'grant_type': 'refresh_token',
+                'refresh_token': localStorage.refreshToken
+            });
+        } catch (e) {
+            return e;
+        }
     }
-});
+
+    return accessToken;
+};
 
 export default {
     save,

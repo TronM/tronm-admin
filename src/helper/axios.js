@@ -20,7 +20,13 @@ instance.interceptors.request.use(async (require) => {
         text: '加载中'
     });
 
-    const accessToken = await token.get();
+    let accessToken = '';
+
+    try {
+        accessToken = await token.get();
+    } catch (e) {
+        accessToken = e;
+    }
 
     if (accessToken === 'error') {
         loadingInstancce.close();
