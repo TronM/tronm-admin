@@ -1,22 +1,33 @@
 import axios from 'axios';
 import { Loading, Notification } from 'element-ui';
-import config from '../config';
+import config from '@/config';
+import token from '@/helper/token';
+import router from '@/router';
 
 const instance = axios.create({
-    baseURL: config.apiServer,
+    baseURL: config.server.api,
     // withCredentials: true,
     timeout: 5000
 });
 
 let loadingInstancce = null;
 
-instance.interceptors.request.use((require) => {
+instance.interceptors.request.use(async (require) => {
     // 全屏遮罩
     loadingInstancce = Loading.service({
         fullscreen: true,
         spinner: 'el-icon-loading',
         text: '加载中'
     });
+
+    const accessToken = await token.get();
+
+    if (accessToken === 'error') {
+        loadingInstancce.close();
+        router.push({ path: '/login' });
+    }
+
+    require.headers.Authorization = `Bearer ${accessToken}`;
     return require;
 });
 

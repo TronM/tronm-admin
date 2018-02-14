@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 export const quillRedefine = (config) => {
     // placeholder
     const placeholder = config.placeholder || 'please write here ...';
@@ -74,7 +76,10 @@ export const quillRedefine = (config) => {
                     const uploadUrl = uploadConfig.action + '/' + fileInput.files[0].name;
                     // 图片上传
                     var xhr = new XMLHttpRequest();
+
                     xhr.open(uploadConfig.methods, uploadUrl, true);
+                    // 设置token，临时
+                    xhr.setRequestHeader('Authorization', `Bearer ${$.cookie('accessToken')}`);
 
                     if (xhr.upload) {
                         xhr.upload.onprogress = function(event) {

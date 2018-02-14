@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 function getError(action, option, xhr) {
     let msg;
     if (xhr.response) {
@@ -68,6 +70,8 @@ export default function upload(option) {
     };
 
     xhr.open('put', action + '/' + option.file.name, true);
+    // 设置token，临时
+    xhr.setRequestHeader('Authorization', `Bearer ${$.cookie('accessToken')}`);
 
     if (option.withCredentials && 'withCredentials' in xhr) {
         xhr.withCredentials = true;

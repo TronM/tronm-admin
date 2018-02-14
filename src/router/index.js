@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import token from '@/helper/token';
 import Login from '@/views/Login';
 import Home from '@/views/Home';
 import Portfolio from '@/views/website/Portfolio';
@@ -14,7 +15,7 @@ Vue.use(Router);
 //     template: '<router-view></router-view>'
 // });
 
-export default new Router({
+const router = new Router({
     routes: [
         {
             path: '',
@@ -32,7 +33,27 @@ export default new Router({
             path: '/login',
             name: '登陆',
             hidden: true,
-            component: Login
+            component: Login,
+            meta: {
+                noRequireAuth: true  // 添加该字段，表示进入这个路由不需要登录的
+            }
         }
     ]
 });
+
+// 拦截器判断
+router.beforeEach(async (to, from, next) => {
+    if (!to.meta.noRequireAuth) {
+        const accessToken = await token.get();
+
+        if (accessToken === 'error') {
+            router.push({ path: '/login' });
+        } else {
+            next();
+        }
+    } else {
+        next();
+    }
+});
+
+export default router;

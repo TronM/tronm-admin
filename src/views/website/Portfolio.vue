@@ -67,7 +67,7 @@
                     class="avatar-uploader"
                     name="avatar"
                     :http-request="test"
-                    :action="uploadUrl"
+                    :action="upload.url"
                     :show-file-list="false"
                     :on-success="addHeadlineImage">
                     <img v-if="form.fields.headlineImage" :src="form.fields.headlineImage" class="avatar">
