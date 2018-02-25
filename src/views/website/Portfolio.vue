@@ -202,7 +202,7 @@ export default {
             this.form.fields.tag.splice(this.form.fields.tag.indexOf(tag), 1);
         },
         addHeadlineImage(response) {
-            const path = this.uploadUrl + '/' + this.form.headlineImage;
+            const path = this.server.img + '/' + this.form.headlineImage;
             this.form.fields.headlineImage = path;
         }
     }

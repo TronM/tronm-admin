@@ -40,9 +40,9 @@ export default {
                 // 必选参数  res是一个函数，函数接收的response为上传成功时服务器返回的数据
                 // 你必须把返回的数据中所包含的图片地址 return 回去
                 res: (res) => {
-                    return config.imgServer + '/' + res.data.path + '/' + res.data.filename;
+                    return config.server.img + '/' + res.data.path + '/' + res.data.filename;
                 },
-                name: config.uploadName,  // 图片上传参数名
+                name: config.upload.name,  // 图片上传参数名
                 success() {
                     self.$notify.success({message: '上传成功'});
                 }

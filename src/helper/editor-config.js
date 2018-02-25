@@ -96,7 +96,7 @@ export const quillRedefine = (config) => {
 
                     // 上传数据成功，会触发
                     xhr.onload = function(e) {
-                        if (xhr.status === 200) {
+                        if (xhr.status === 200 || xhr.status === 204) {
                             // var res = JSON.parse(xhr.responseText);
                             // let url = uploadConfig.res(res);
                             // console.log(res)
