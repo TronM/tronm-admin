@@ -13,10 +13,13 @@ const get = async() => {
 
     if (!accessToken) {
         try {
-            accessToken = await api.refresh({
+            const res = await api.refresh({
                 'grant_type': 'refresh_token',
                 'refresh_token': localStorage.refreshToken
             });
+
+            accessToken = res.access_token;
+            save(res);
         } catch (e) {
             return e;
         }

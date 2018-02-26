@@ -16,7 +16,6 @@
 
 <script>
 import api from '@/api/website/login';
-import token from '@/helper/token';
 
 export default {
     data() {
@@ -32,14 +31,13 @@ export default {
     },
     methods: {
         async login() {
-            const req = await api.login({ username: this.form.fields.username, password: this.form.fields.password });
-            if (req === 'error') {
+            const res = await api.login({ username: this.form.fields.username, password: this.form.fields.password });
+            if (res === 'error') {
                 this.$notify.error({
                     title: '错误',
                     message: '登陆失败'
                 });
             } else {
-                token.save(req.data);
                 this.$router.push({ path: '/' });
             }
         }

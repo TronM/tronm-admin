@@ -1,5 +1,6 @@
-import axios from '@/helper/axios';
+import instance from '@/helper/axios';
 
+const axios = instance();
 const base = '/portfolio';
 
 const insert = params => axios.post(`${base}`, params).then(res => res);

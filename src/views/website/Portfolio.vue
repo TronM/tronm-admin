@@ -1,5 +1,5 @@
 <template>
-    <div class="portfolio" ref="database">
+    <div class="portfolio" ref="portfolio">
 		<el-col :span="24" class="toolbar">
 			<el-form :inline="true">
 				<el-form-item>
@@ -15,13 +15,7 @@
 		</el-col>
 
         <el-table :data="list" stripe border style="width: 100%" ref="table">
-            <el-table-column label="公开" width="80" align="center">
-                <template slot-scope="scope">
-                    <el-switch
-                        v-model="scope.row.isPublish" @change="changePublish(scope.row.id)">
-                    </el-switch>
-                </template>
-            </el-table-column>
+            <el-table-column prop="ownedByGroup" label="归属" width="100" align="center"></el-table-column>
             <el-table-column prop="headline" label="标题"></el-table-column>
             <el-table-column prop="operation" label="操作" width="200">
                 <template slot-scope="scope">
@@ -42,7 +36,7 @@
             </el-pagination>
         </el-col>
 
-        <el-dialog :title="form.editId === 0 ? '新建' : '修改'" :visible.sync="form.visible" :before-close="test2" width="80%">
+        <el-dialog :title="form.editId === 0 ? '新建' : '修改'" :visible.sync="form.visible" :before-close="closeDialog" width="80%">
             <el-form :model="form.fields" ref="form" :rules="form.rules" label-width="120px">
                 <el-form-item label="标题" prop="headline">
                     <el-input v-model="form.fields.headline" placeholder="标题"></el-input>
@@ -52,6 +46,16 @@
                     <el-input class="input-new-tag" v-if="tagVisible" v-model="tagValue" ref="formTagInput" size="small" @keyup.enter.native="saveTag()" @blur="saveTag()"></el-input>
                     <el-button v-else class="button-new-tag" size="small" @click="showTag()">+ New Tag</el-button>
                 </el-form-item>
+                <el-form-item label="所属用户组" prop="group">
+                    <el-select v-model="form.fields.ownedByGroup" placeholder="请选择">
+                        <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>    
                  <el-form-item label="PC链接地址" prop="browseUrl.pc">
                     <el-input placeholder="请输入链接地址" v-model="form.fields.browseUrl.pc">
                         <template slot="prepend">Http://</template>
@@ -66,7 +70,7 @@
                     <el-upload
                     class="avatar-uploader"
                     name="avatar"
-                    :http-request="test"
+                    :http-request="headlineUpload"
                     :action="upload.url"
                     :show-file-list="false"
                     :on-success="addHeadlineImage">
@@ -96,8 +100,8 @@ const fields = {
     headline: '',
     body: '',
     headlineImage: '',
-    isPublish: false,
     tag: [],
+    ownedByGroup: '',
     browseUrl: {
         h5: '',
         pc: ''
@@ -109,6 +113,10 @@ export default {
     data() {
         return {
             ...config,
+            options: [
+                {label: 'guest', value: 'guest'},
+                {label: 'customer', value: 'customer'}
+            ],
             list: [],
             total: 30,
             page: 1,
@@ -135,12 +143,11 @@ export default {
         this.loadList(this.page, this.pagesize);
     },
     methods: {
-        test2(done) {
-            console.log(111222333444555);
+        closeDialog(done) {
             this.$nextTick(() => this.$refs['form'].resetFields());
             done();
         },
-        test(item) {
+        headlineUpload(item) {
             this.form.headlineImage = item.file.name;
             upload(item);
         },
@@ -150,7 +157,6 @@ export default {
             this.list = list;
         },
         search() {
-            console.log(112233);
             this.loadList(1, this.pagesize);
         },
         handleCurrentChange(page) {
