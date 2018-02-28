@@ -13,9 +13,16 @@ const get = async() => {
 
     if (!accessToken) {
         try {
+            // Check refreshToken before sending request to avoid wrong request
+            const { refreshToken } = localStorage;
+            if (!refreshToken) {
+                // TODO: make sure whether here should return a string error?
+                return 'error';
+            }
+
             const res = await api.refresh({
                 'grant_type': 'refresh_token',
-                'refresh_token': localStorage.refreshToken
+                'refresh_token': refreshToken
             });
 
             accessToken = res.access_token;
