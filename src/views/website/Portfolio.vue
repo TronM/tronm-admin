@@ -66,18 +66,36 @@
                         <template slot="prepend">Http://</template>
                     </el-input>
                 </el-form-item>
-                <el-form-item label="头图" prop="headlineImage">
-                    <el-upload
-                    class="avatar-uploader"
-                    name="avatar"
-                    :http-request="headlineUpload"
-                    :action="upload.url"
-                    :show-file-list="false"
-                    :on-success="addHeadlineImage">
-                    <img v-if="form.fields.headlineImage" :src="form.fields.headlineImage" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                    </el-upload>
-                </el-form-item>
+                <el-row>
+                <el-col :span="12">
+                    <el-form-item label="缩略图" prop="headlineImage">
+                        <el-upload
+                        class="avatar-uploader"
+                        name="avatar"
+                        :http-request="headlineUpload"
+                        :action="upload.url"
+                        :show-file-list="false"
+                        :on-success="addHeadlineImage">
+                        <img v-if="form.fields.headlineImage" :src="form.fields.headlineImage" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                        </el-upload>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="KV" prop="kv">
+                        <el-upload
+                        class="avatar-uploader"
+                        name="avatar"
+                        :http-request="kvUpload"
+                        :action="upload.url"
+                        :show-file-list="false"
+                        :on-success="addKv">
+                        <img v-if="form.fields.kv" :src="form.fields.kv" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                        </el-upload>
+                    </el-form-item>
+                </el-col>
+                </el-row>
                 <el-form-item label="正文" prop="body">
                     <Editor v-model="form.fields.body"></Editor>
                 </el-form-item>
@@ -100,6 +118,7 @@ const fields = {
     headline: '',
     body: '',
     headlineImage: '',
+    kv: '',
     tag: [],
     ownedByGroup: '',
     browseUrl: {
@@ -149,6 +168,10 @@ export default {
         },
         headlineUpload(item) {
             this.form.headlineImage = item.file.name;
+            upload(item);
+        },
+        kvUpload(item) {
+            this.form.kv = item.file.name;
             upload(item);
         },
         async loadList(page, pagesize) {
@@ -210,6 +233,10 @@ export default {
         addHeadlineImage(response) {
             const path = this.server.img + '/' + this.form.headlineImage;
             this.form.fields.headlineImage = path;
+        },
+        addKv(response) {
+            const path = this.server.img + '/' + this.form.kv;
+            this.form.fields.kv = path;
         }
     }
 };
