@@ -9,9 +9,9 @@
 		</el-col>
 
         <el-table :data="list" stripe border style="width: 100%" ref="table">
-            <el-table-column prop="ownedByGroup" label="用户名" width="200"></el-table-column>
-            <el-table-column prop="headline" label="有效期" width="200"></el-table-column>
-            <el-table-column prop="headline" label="邮箱"></el-table-column>
+            <el-table-column prop="id" label="用户名"></el-table-column>
+            <el-table-column prop="expiresAt" label="有效期" width="200"></el-table-column>
+            <el-table-column prop="email" label="邮箱" width="200"></el-table-column>
             <el-table-column prop="operation" label="操作" width="200">
                 <!-- <template slot-scope="scope">
                     <el-button size="small" @click="edit(scope.row)">编辑</el-button>
@@ -20,7 +20,7 @@
             </el-table-column>
         </el-table>
 
-        <!-- <el-col :span="24" class="footerbar">
+        <el-col :span="24" class="footerbar">
             <el-pagination class="pagination"
                 background
                 layout="prev, pager, next" 
@@ -29,7 +29,7 @@
                 :current-page.sync="page"
                 @current-change="handleCurrentChange">
             </el-pagination>
-        </el-col> -->
+        </el-col>
 
         <el-dialog title="新建用户" :visible.sync="form.visible" :before-close="closeDialog">
             <el-form :model="form.fields" ref="form" :rules="form.rules" label-width="120px">
@@ -58,6 +58,7 @@
 </template>
 
 <script>
+import config from '@/config';
 import api from '@/api/website/guest';
 
 const fields = {
@@ -71,6 +72,9 @@ const fields = {
 export default {
     data() {
         return {
+            ...config,
+            page: 1,
+            total: 50,
             list: [],
             form: {
                 visible: false,
@@ -82,13 +86,24 @@ export default {
                     ],
                     email: [
                         { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-                        { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }
+                        { type: 'email', message: '请输入正确的邮箱地址', trigger: 'change' }
                     ]
                 }
             }
         };
     },
+    mounted() {
+        this.refreshList();
+    },
     methods: {
+        async loadList(page, pagesize) {
+            const list = await api.list({page, pagesize});
+            this.list = list;
+        },
+        refreshList() {
+            this.page = 1;
+            this.loadList(this.page, this.pagesize);
+        },
         closeDialog(done) {
             this.$nextTick(() => this.$refs['form'].resetFields());
             done();
@@ -103,9 +118,12 @@ export default {
 
             if (valid) {
                 await api.insert(this.form.fields);
-                // this.loadList(this.page, this.pagesize);
+                this.refreshList();
                 this.form.visible = false;
             }
+        },
+        handleCurrentChange(page) {
+            this.loadList(page, this.pagesize);
         }
     }
 };
