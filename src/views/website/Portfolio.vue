@@ -57,17 +57,17 @@
                     </el-select>
                 </el-form-item>    
                  <el-form-item label="PC链接地址" prop="browseUrl.pc">
-                    <el-input placeholder="请输入链接地址" v-model="form.fields.browseUrl.pc">
-                        <template slot="prepend">Http://</template>
+                    <el-input placeholder="请输入链接地址：http://www.tron-m.com/xxx" v-model="form.fields.browseUrl.pc">
+                        <template slot="prepend">URL</template>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="h5链接地址" prop="browseUrl.h5">
-                    <el-input placeholder="请输入链接地址" v-model="form.fields.browseUrl.h5">
-                        <template slot="prepend">Http://</template>
+                    <el-input placeholder="请输入链接地址：http://www.tron-m.com/xxx" v-model="form.fields.browseUrl.h5">
+                        <template slot="prepend">URL</template>
                     </el-input>
                 </el-form-item>
                 <el-row>
-                <el-col :span="12">
+                <el-col :span="8">
                     <el-form-item label="缩略图" prop="headlineImage">
                         <el-upload
                         class="avatar-uploader"
@@ -76,12 +76,12 @@
                         :action="upload.url"
                         :show-file-list="false"
                         :on-success="addHeadlineImage">
-                        <img v-if="form.fields.headlineImage" :src="form.fields.headlineImage" class="avatar">
-                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                        <img v-if="form.fields.headlineImage" :src="form.fields.headlineImage" class="headlineImage">
+                        <i v-else class="el-icon-plus avatar-uploader-icon headlineImage-icon"></i>
                         </el-upload>
                     </el-form-item>
                 </el-col>
-                <el-col :span="12">
+                <el-col :span="16">
                     <el-form-item label="KV" prop="kv">
                         <el-upload
                         class="avatar-uploader"
@@ -90,8 +90,8 @@
                         :action="upload.url"
                         :show-file-list="false"
                         :on-success="addKv">
-                        <img v-if="form.fields.kv" :src="form.fields.kv" class="avatar">
-                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                        <img v-if="form.fields.kv" :src="form.fields.kv" class="kv">
+                        <i v-else class="el-icon-plus avatar-uploader-icon kv-icon"></i>
                         </el-upload>
                     </el-form-item>
                 </el-col>
@@ -264,7 +264,7 @@ export default {
     }
 
     .avatar-uploader {
-        height: 88px;
+        height: 150px;
 
         .el-upload {
             border: 1px dashed #d9d9d9;
@@ -272,6 +272,7 @@ export default {
             cursor: pointer;
             position: relative;
             overflow: hidden;
+            line-height: 0;
         }
 
         .el-upload:hover {
@@ -281,17 +282,30 @@ export default {
         .avatar-uploader-icon {
             font-size: 28px;
             color: #8c939d;
-            width: 158px;
-            height: 88px;
-            line-height: 88px;
             text-align: center;
         }
-    }
 
-    .avatar {
-        width: 158px;
-        height: 88px;
-        display: block;
+        .headlineImage-icon {
+            width: 148px;
+            height: 148px;
+            line-height: 148px;
+        }
+
+        .headlineImage {
+            height: 150px;
+            width: 150px;
+        }
+
+        .kv-icon {
+            width: (150 / 9) * 16 - 2px;
+            height: 148px;
+            line-height: 148px;
+        }
+
+        .kv {
+            height: 150px;
+            width: (150 / 9) * 16px;
+        }
     }
 }
 
